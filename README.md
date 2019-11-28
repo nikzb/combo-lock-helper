@@ -1,3 +1,7 @@
+# Combo Lock Helper
+
+Need some help getting your combination lock open? Just put in your combination and combo lock helper will show you exactly what to do.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
