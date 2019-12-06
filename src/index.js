@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
@@ -9,9 +8,12 @@ import preset from '@rebass/preset';
 
 const theme = {
   ...preset,
+  buttons: {
+    ...preset.buttons,
+    secondaryOutline: {variant: "buttons.primary", color: "secondary", bg: "transparent", boxShadow: "inset 0 0 2px"}
+  },
   colors: {
     ...preset.colors,
-    // secondary: '#c07',
     secondary: '#a3005f',
   }
 };

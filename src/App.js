@@ -184,7 +184,7 @@ function App() {
     ) {
       buttons = (
         <Button
-          variant="secondary"
+          variant={currentState.matches("resetting") ? "secondaryOutline" : "secondary"}
           width="2/5"
           onClick={onReset}
           disabled={currentState.matches("resetting")}
