@@ -229,9 +229,6 @@ function App() {
         fontSize={5}
         fontFamily="sans-serif"
         p={3}
-        // sx={{
-        //   padding: "20px"
-        // }}
       >
         Combo Lock Helper
       </Heading>
@@ -254,10 +251,16 @@ function App() {
               type="number"
               min={0}
               max={numbersOnDial - 1}
-              placeholder={10}
               value={firstNumber}
               onClick={e => e.target.select()}
-              onChange={e => setFirstNumber(Number(e.target.value))}
+              onChange={e => {
+                // This is necessary to prevent automatically showing a 0 when the current value is deleted
+                if (e.target.value === "") {
+                  setFirstNumber(undefined);
+                } else {
+                  setFirstNumber(Number(e.target.value));
+                }
+              }}
               disabled={disableControls}
               backgroundColor={currentState.matches('start') ? "#FFF" : "#EEE"}
               width={`${INPUT_WIDTH}px`}
@@ -271,10 +274,16 @@ function App() {
               type="number"
               min={0}
               max={numbersOnDial - 1}
-              placeholder={25}
               value={secondNumber}
               onClick={e => e.target.select()}
-              onChange={e => setSecondNumber(Number(e.target.value))}
+              onChange={e => {
+                // This is necessary to prevent automatically showing a 0 when the current value is deleted
+                if (e.target.value === "") {
+                  setSecondNumber(undefined);
+                } else {
+                  setSecondNumber(Number(e.target.value));
+                }
+              }}
               disabled={disableControls}
               backgroundColor={currentState.matches('start') ? "#FFF" : "#EEE"}
               width={`${INPUT_WIDTH}px`}
@@ -288,10 +297,16 @@ function App() {
               type="number"
               min={0}
               max={numbersOnDial - 1}
-              placeholder={20}
               value={thirdNumber}
               onClick={e => e.target.select()}
-              onChange={e => setThirdNumber(Number(e.target.value))}
+              onChange={e => {
+                // This is necessary to prevent automatically showing a 0 when the current value is deleted
+                if (e.target.value === "") {
+                  setThirdNumber(undefined);
+                } else {
+                  setThirdNumber(Number(e.target.value));
+                }
+              }}
               disabled={disableControls}
               backgroundColor={currentState.matches('start') ? "#FFF" : "#EEE"}
               width={`${INPUT_WIDTH}px`}
