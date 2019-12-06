@@ -316,7 +316,9 @@ function App() {
               step={5}
               min={10}
               max={90}
-              onChange={e => setSpeed(e.target.value)}
+              onChange={e => { 
+                setSpeed(Number(e.target.value))
+              }}
             />
           </Box>
           <Box>
@@ -328,7 +330,7 @@ function App() {
               step={10}
               min={30}
               max={100}
-              onChange={e => setNumbersOnDial(e.target.value)}
+              onChange={e => setNumbersOnDial(Number(e.target.value))}
               disabled={disableControls}
             />
           </Box>
