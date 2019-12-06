@@ -1,6 +1,6 @@
 # Combo Lock Helper
 
-Need some help getting your combination lock open? Just put in your combination and combo lock helper will show you exactly what to do.
+## Need some help getting your combination lock open? Just put in your combination and combo lock helper will show you exactly what to do.
 
 This was created using the following:
 
@@ -10,7 +10,11 @@ This was created using the following:
 * HTML5 Canvas 
 * Create React App
 
-I built the original version of this a few years back using good old HTML, CSS, JS and HTML5 Canvas, using JQuery to manipulate what buttons were showing / enabled or disabled. In the midst of creating that original version, I realized it would be helpful to draw out a finite state machine that showed all the states the app could be in and what transitions could occur to move between those state. Fast forward several years, I was checking out XStaet and I decided to rewrite some major parts of this app using the latest tools (React w/ hooks, Rebass, and most of all, XState, because of the fact that I had planned this app out using a finite state machine years earlier). I honestly had never even heard of Rebass, but decided to just give it a try on a whim and my first impression of it is fairly positive. I think I have pretty much bought into the philosophy that combining HTML, CSS, and JS all in one place actually works really nicely in many ways. I am sure there are tradeoffs but based on my experience, I am a fan. One last thing: I updated some of the lock animation code, and the basic structure of this updated version is that you call a function `lock` to create a lock animation for the passed in canvas, and you get back an object with several "public" functions you can call. The global variables in the `lock` function are essentially private data, and are accessed by the functions within the `lock` function via closures. 
+I built the original version of this a few years back using good old HTML, CSS, JS and HTML5 Canvas, using JQuery to manipulate what buttons were showing / enabled or disabled. In the midst of creating that original version, I realized it would be helpful to draw out a finite state machine that showed all the states the app could be in and what transitions could occur to move between those state. 
+
+Fast forward several years, I was checking out XStaet and I decided to rewrite some major parts of this app using the latest tools (React w/ hooks, Rebass, and most of all, XState, because of the fact that I had planned this app out using a finite state machine years earlier). I honestly had never even heard of Rebass, but decided to just give it a try on a whim and my first impression of it is fairly positive. I think I have pretty much bought into the philosophy that combining HTML, CSS, and JS all in one place actually works really nicely in many ways. I am sure there are tradeoffs but based on my experience, I am a fan. 
+
+One last thing: I updated some of the lock animation code, and the basic structure of this updated version is that you call a function `lock` to create a lock animation for the passed in canvas, and you get back an object with several "public" functions you can call. The global variables in the `lock` function are essentially private data, and are accessed by the functions within the `lock` function via closures. 
 
 # Creat React App Info
 
