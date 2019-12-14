@@ -14,7 +14,7 @@ function ImageRotation(totalAngle, number) {
   };
 }
 
-export function lock(canvas, numbersOnDial, onResetComplete, onAnimationComplete) {
+export function lock(canvas, numbersOnDial, onResetComplete, onRotationAnimationComplete, onShackleAnimationComplete) {
   const context = canvas.getContext("2d");
   
   const X_OFFSET = canvas.width / 2;
@@ -392,17 +392,16 @@ export function lock(canvas, numbersOnDial, onResetComplete, onAnimationComplete
           // in stepByStep, but not the same step number, so remove rot element and wait for next click
           // remove the first rotation element in the array
           imageRotations.shift();
-          console.log('animation complete, in rotateImage');
-          onAnimationComplete();
+          onRotationAnimationComplete();
         }
       } else if (mode === 'reset') {
         // finished with turns
         onResetComplete();
-        console.log('reset complete, in rotateImage');
         mode = 'unlock';
       } else {
         // done opening lock
         imageRotations = [];
+        onRotationAnimationComplete();
         if (shouldOpen && !shackleIsOpen) {
           // open shackle if completed combination
           openShackle(0);
@@ -451,8 +450,7 @@ export function lock(canvas, numbersOnDial, onResetComplete, onAnimationComplete
         openShackle(distanceOpened);
       });
     } else {
-      console.log('animation complete, in open shackle');
-      onAnimationComplete();
+      onShackleAnimationComplete();
     }
   }
 

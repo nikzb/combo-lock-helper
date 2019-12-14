@@ -35,6 +35,9 @@ const lockHelperMachine = Machine({
     },
     unlocking: {
       on: {
+        ROTATION_DONE: {
+          target: "unshackling"
+        },
         RESET: {
           target: "resetting",
           actions: assign({
@@ -45,7 +48,7 @@ const lockHelperMachine = Machine({
     },
     resetting: {
       on: {
-        DONE: {
+        RESET_DONE: {
           target: "start",
           actions: assign({
             animating: false
@@ -58,9 +61,10 @@ const lockHelperMachine = Machine({
       states: {
         active: {
           on: {
-            DONE: {
-              target: "idle"
-            }
+            ROTATION_DONE: {
+              target: "idle",
+              cond: (context) => (context.step < 3)
+            },
           }
         },
         idle: {
@@ -81,6 +85,28 @@ const lockHelperMachine = Machine({
           actions: assign({
             step: 0,
           })
+        },
+        ROTATION_DONE: {
+          target: "unshackling"
+        }
+      }
+    },
+    unshackling: {
+      initial: "active",
+      states: {
+        active: {
+          on: { 
+            SHACKLE_DONE: {
+              target: "idle"
+            }
+          }
+        },
+        idle: {
+        }
+      },
+      on: {
+        RESET: {
+          target: "resetting",
         }
       }
     }
@@ -94,18 +120,28 @@ function App() {
   const [secondNumber, setSecondNumber] = React.useState(25);
   const [thirdNumber, setThirdNumber] = React.useState(20);
 
-  const [currentState, send] = useMachine(lockHelperMachine);
+  const [currentState, send, service] = useMachine(lockHelperMachine);
+
+  // For debugging
+  const [showingTransitions, setShowingTransitions] = React.useState(false);
+  React.useEffect(() => {
+    if (!showingTransitions) {
+      service.onTransition(state => console.log(state.value));
+      setShowingTransitions(true);
+    }
+  }, [service, showingTransitions]);
 
   const canvasRef = React.useRef(null);
   const lockRef = React.useRef(null);
 
   React.useEffect(() => {
-    const onResetComplete = () => send("DONE");
-    const onAnimationComplete = () => send("DONE");
+    const onResetComplete = () => send("RESET_DONE");
+    const onRotationAnimationComplete = () => send("ROTATION_DONE");
+    const onShackleAnimationComplete = () => send("SHACKLE_DONE");
     if (lockRef.current) {
       lockRef.current.setNumbersOnDial(numbersOnDial);
     } else {
-      lockRef.current = lock(canvasRef.current, numbersOnDial, onResetComplete, onAnimationComplete);
+      lockRef.current = lock(canvasRef.current, numbersOnDial, onResetComplete, onRotationAnimationComplete, onShackleAnimationComplete);
     }
     lockRef.current.drawLock();
   }, [numbersOnDial, send]);
@@ -181,14 +217,15 @@ function App() {
       justify = "space-between";
     } else if (
       currentState.matches("unlocking") ||
-      currentState.matches("resetting")
+      currentState.matches("resetting") ||
+      currentState.matches("unshackling")
     ) {
       buttons = (
         <Button
           variant={currentState.matches("resetting") ? "secondaryOutline" : "secondary"}
           width="2/5"
           onClick={onReset}
-          disabled={currentState.matches("resetting")}
+          disabled={currentState.matches("resetting") || currentState.matches("unshackling.active")}
         >
           Reset
         </Button>
