@@ -25,7 +25,7 @@ const lockHelperMachine = Machine({
           })
         },
         STEP_BY_STEP: {
-          target: "steppingActive",
+          target: "stepping",
           actions: assign({
             step: 1,
             animating: true
@@ -53,28 +53,29 @@ const lockHelperMachine = Machine({
         }
       }
     },
-    steppingActive: {
-      on: {
-        DONE: {
-          target: "steppingIdle"
+    stepping: {
+      initial: "active",
+      states: {
+        active: {
+          on: {
+            DONE: {
+              target: "idle"
+            }
+          }
         },
-        RESET: {
-          target: "resetting",
-          actions: assign({
-            step: 0,
-          })
+        idle: {
+          on: {
+            // Needs a guard to prevent from happening after 3 steps are done?
+            NEXT_STEP: {
+              target: "active",
+              actions: assign({
+                step: (context, event) => (context.step < 3 ? context.step + 1 : 3),
+              })
+            }
+          }
         }
-      }
-    },
-    steppingIdle: {
+      },
       on: {
-        // Needs a guard to prevent from happening after 3 steps are done?
-        NEXT_STEP: {
-          target: "steppingActive",
-          actions: assign({
-            step: (context, event) => (context.step < 3 ? context.step + 1 : 3),
-          })
-        },
         RESET: {
           target: "resetting",
           actions: assign({
@@ -193,7 +194,7 @@ function App() {
         </Button>
       );
       justify = "center";
-    } else if (currentState.matches("steppingActive") || currentState.matches("steppingIdle")) {
+    } else if (currentState.matches("stepping")) {
       buttons = (
         <>
           <Button variant="secondary" width="2/5" onClick={onReset}>
@@ -201,10 +202,10 @@ function App() {
           </Button>
           {currentState.context.step < 3 && 
           <Button
-            variant={currentState.matches("steppingActive") ? "outline" : "primary"}
+            variant={currentState.matches("stepping.active") ? "outline" : "primary"}
             width="2/5"
             onClick={onNextStep}
-            disabled={currentState.matches("steppingActive")}
+            disabled={currentState.matches("stepping.active")}
           >
             Next Step
           </Button>
