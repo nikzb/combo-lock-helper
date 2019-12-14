@@ -392,11 +392,13 @@ export function lock(canvas, numbersOnDial, onResetComplete, onAnimationComplete
           // in stepByStep, but not the same step number, so remove rot element and wait for next click
           // remove the first rotation element in the array
           imageRotations.shift();
+          console.log('animation complete, in rotateImage');
           onAnimationComplete();
         }
       } else if (mode === 'reset') {
         // finished with turns
         onResetComplete();
+        console.log('reset complete, in rotateImage');
         mode = 'unlock';
       } else {
         // done opening lock
@@ -449,6 +451,7 @@ export function lock(canvas, numbersOnDial, onResetComplete, onAnimationComplete
         openShackle(distanceOpened);
       });
     } else {
+      console.log('animation complete, in open shackle');
       onAnimationComplete();
     }
   }
@@ -459,20 +462,12 @@ export function lock(canvas, numbersOnDial, onResetComplete, onAnimationComplete
     }
     shouldOpen = false;
     mode = 'reset';
-
-    if (mode === "stepByStep" && (imageRotations.length === 1 || imageRotations.length === 3)) {
-      imageRotations = [];
-      imageRotations.push(ImageRotation(2 * Math.PI - currentAngle % (2 * Math.PI), 0));
-      rotateImage();
-    }
-    else {
-      imageRotations = [];
-      imageRotations.push(ImageRotation(2 * Math.PI - currentAngle % (2 * Math.PI), 0));
-      rotateImage();
-      if (shackleIsOpen) {
-        returnToOriginalSize();
-      }
-    }
+    imageRotations = [];
+    imageRotations.push(ImageRotation(2 * Math.PI - currentAngle % (2 * Math.PI), 0));
+    rotateImage();
+    if (shackleIsOpen) {
+      returnToOriginalSize();
+    } 
   }
 
   // Zoom in to show the lock in the original size after a reset.
