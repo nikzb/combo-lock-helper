@@ -2,6 +2,8 @@
 
 ## Need some help getting your combination lock open? Just put in your combination and combo lock helper will show you exactly what to do.
 
+https://nikzb.github.io/combo-lock-helper/
+
 This was created using the following:
 
 * React
