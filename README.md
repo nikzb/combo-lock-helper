@@ -4,6 +4,8 @@
 
 https://nikzb.github.io/combo-lock-helper/
 
+To redeploy to github pages after updates, use `npm run deploy`.
+
 This was created using the following:
 
 * React
