@@ -1,117 +1,12 @@
 import React from "react";
 import { useMachine } from "@xstate/react";
-import { Machine, assign } from "xstate";
 import { Input, Slider, Label } from "@rebass/forms";
 import { Box, Flex, Heading, Button, Text } from "rebass";
 
+import { lockHelperMachine } from './lockHelperMachine';
 import { lock } from "./lock";
 
 const INPUT_WIDTH = 70;
-
-const lockHelperMachine = Machine({
-  id: "lock-helper",
-  initial: "start",
-  context: {
-    step: 0,
-    animating: false
-  },
-  states: {
-    start: {
-      on: {
-        UNLOCK: {
-          target: "unlocking",
-          actions: assign({
-            animating: true
-          })
-        },
-        STEP_BY_STEP: {
-          target: "stepping",
-          actions: assign({
-            step: 1,
-            animating: true
-          })
-        }
-      }
-    },
-    unlocking: {
-      on: {
-        ROTATION_DONE: {
-          target: "unshackling"
-        },
-        RESET: {
-          target: "resetting",
-          actions: assign({
-            animating: true
-          })
-        }
-      }
-    },
-    resetting: {
-      on: {
-        RESET_DONE: {
-          target: "start",
-          actions: assign({
-            animating: false
-          })
-        }
-      }
-    },
-    stepping: {
-      initial: "active",
-      states: {
-        active: {
-          on: {
-            ROTATION_DONE: {
-              target: "idle",
-              cond: (context) => (context.step < 3)
-            },
-          }
-        },
-        idle: {
-          on: {
-            // Needs a guard to prevent from happening after 3 steps are done?
-            NEXT_STEP: {
-              target: "active",
-              actions: assign({
-                step: (context, event) => (context.step < 3 ? context.step + 1 : 3),
-              })
-            }
-          }
-        }
-      },
-      on: {
-        RESET: {
-          target: "resetting",
-          actions: assign({
-            step: 0,
-          })
-        },
-        ROTATION_DONE: {
-          target: "unshackling"
-        }
-      }
-    },
-    unshackling: {
-      initial: "active",
-      states: {
-        active: {
-          on: { 
-            SHACKLE_DONE: {
-              target: "idle"
-            }
-          }
-        },
-        idle: {
-        }
-      },
-      on: {
-        RESET: {
-          target: "resetting",
-        }
-      }
-    }
-  }
-});
 
 function App() {
   const [speed, setSpeed] = React.useState(50);
@@ -264,7 +159,7 @@ function App() {
       <Heading
         as="h1"
         color="primary"
-        fontSize={5}
+        fontSize={[4,5]}
         fontFamily="sans-serif"
         p={3}
       >
@@ -354,10 +249,10 @@ function App() {
         </fieldset>
         {getButtons()}
         <Flex
-          width="330px"
+          width={["310px", "330px"]}
           justifyContent="space-between"
           sx={{
-            padding: "20px"
+            padding: ["10px", "20px"]
           }}
         >
           <Box>
